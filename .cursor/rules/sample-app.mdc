@@ -13,7 +13,7 @@ OCP 本番環境を想定し、アプリを **`prod` namespace** へデプロイ
 |------|-----|
 | 環境 | 本番（production） |
 | namespace | **`prod`** |
-| namespace の作成 | Kustomize の `namespace.yaml` で Git 管理 |
+| namespace の作成 | Kustomize の `namespace.yaml` で Git 管理（`argocd.argoproj.io/managed-by: openshift-gitops` ラベルで Operator が RoleBinding を自動作成） |
 
 ## ディレクトリ構成
 
