@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: https://github.com/aki0000/sample-app-with-argocd.git
     targetRevision: main
-    path: openshift/overlays/prod
+    path: kustomize/overlays/prod
   destination:
     server: https://kubernetes.default.svc
     namespace: prod
