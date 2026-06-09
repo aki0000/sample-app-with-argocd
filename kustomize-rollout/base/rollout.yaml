@@ -1,0 +1,38 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: sample-tomcat
+  labels:
+    app: sample-tomcat
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sample-tomcat
+  template:
+    metadata:
+      labels:
+        app: sample-tomcat
+    spec:
+      containers:
+        - name: sample-tomcat
+          image: quay.io/akhino/sample-tomcat:v2
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+              name: http
+              protocol: TCP
+          volumeMounts:
+            - name: server-xml
+              mountPath: /usr/local/tomcat/conf/server.xml
+              subPath: server.xml
+              readOnly: true
+      volumes:
+        - name: server-xml
+          configMap:
+            name: sample-tomcat-server-xml
+  strategy:
+    blueGreen:
+      activeService: sample-tomcat
+      previewService: sample-tomcat-preview
+      autoPromotionEnabled: false

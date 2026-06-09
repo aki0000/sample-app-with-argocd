@@ -1,7 +1,7 @@
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  name: sample-tomcat
+  name: sample-tomcat-preview
   labels:
     app: sample-tomcat
 spec:
@@ -11,7 +11,7 @@ spec:
     insecureEdgeTerminationPolicy: Redirect
   to:
     kind: Service
-    name: sample-tomcat
+    name: sample-tomcat-preview
     weight: 100
   port:
     targetPort: http

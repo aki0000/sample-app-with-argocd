@@ -1,19 +1,19 @@
 ---
-description: ArgoCD + Kustomize で OCP 本番（prod namespace）へ GitOps デプロイするデモリポジトリ
+description: ArgoCD + Kustomize で OCP 本番（prod）・ステージング（stg）へ GitOps デプロイするデモリポジトリ
 alwaysApply: true
 ---
 
-# ArgoCD + Kustomize デプロイサンプル（本番 / prod）
+# ArgoCD + Kustomize デプロイサンプル（stg / prod）
 
-OCP 本番環境を想定し、アプリを **`prod` namespace** へデプロイする。マニフェストは Git 上の Kustomize で管理し、**ArgoCD** がクラスタへ同期（GitOps）する。
+OCP 環境を想定し、アプリを **`stg`** および **`prod` namespace** へデプロイする。マニフェストは Git 上の Kustomize で管理し、**ArgoCD** がクラスタへ同期（GitOps）する。
 
 ## デプロイ先
 
-| 項目 | 値 |
-|------|-----|
-| 環境 | 本番（production） |
-| namespace | **`prod`** |
-| namespace の作成 | Kustomize の `namespace.yaml` で Git 管理（`argocd.argoproj.io/managed-by: openshift-gitops` ラベルで Operator が RoleBinding を自動作成） |
+| 項目 | stg | prod |
+|------|-----|------|
+| 環境 | ステージング | 本番（production） |
+| namespace | **`stg`** | **`prod`** |
+| namespace の作成 | Kustomize の `namespace.yaml` で Git 管理（`argocd.argoproj.io/managed-by: openshift-gitops` ラベルで Operator が RoleBinding を自動作成） | 同左 |
 
 ## ディレクトリ構成
 
@@ -22,20 +22,26 @@ sample-app-with-argocd/
 ├── README.md
 ├── ContainerFile
 ├── argocd/
-│   └── application.yaml         # overlays/prod → prod へ Sync
+│   ├── application.yaml         # overlays/prod → prod へ Sync
+│   └── application-stg.yaml     # overlays/stg → stg へ Sync
 └── kustomize/
     ├── base/
     │   ├── kustomization.yaml
     │   ├── configmap.yaml
     │   ├── deployment.yaml
     │   ├── service.yaml
-    │   └── route.yaml           # Route は base のみ（edge 終端）
+    │   └── route.yaml           # Route 共通定義（edge 終端、ホストは overlay で指定）
     └── overlays/
+        ├── stg/
+        │   ├── kustomization.yaml
+        │   ├── namespace.yaml
+        │   └── route-patch.yaml # stg 用ホスト名
         └── prod/
             ├── kustomization.yaml
-            └── namespace.yaml
+            ├── namespace.yaml
+            └── route-patch.yaml # prod 用ホスト名
 ```
 
-- ArgoCD Application の `spec.source.path` は `kustomize/overlays/prod`
-- ArgoCD Application の `spec.destination.namespace` は `prod`
+- ArgoCD Application の `spec.source.path` は `kustomize/overlays/stg` または `kustomize/overlays/prod`
+- ArgoCD Application の `spec.destination.namespace` は `stg` または `prod`
 - Application CR は `argocd/` に置き、マニフェスト（`kustomize/`）とは分離する
