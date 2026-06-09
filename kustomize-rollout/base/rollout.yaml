@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: sample-tomcat
-          image: quay.io/akhino/sample-tomcat:v2
+          image: quay.io/akhino/sample-tomcat
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
