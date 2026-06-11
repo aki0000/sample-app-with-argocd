@@ -13,7 +13,7 @@ spec:
     path: kustomize-rollout/overlays/prod
   destination:
     server: https://kubernetes.default.svc
-    namespace: prod
+    namespace: prod-rollout
   ignoreDifferences:
     - group: ""
       kind: Service
