@@ -6,6 +6,6 @@ resources:
   - ../../base
 images:
   - name: quay.io/akhino/sample-tomcat
-    newTag: v2
+    newTag: v1
 patches:
   - path: route-patch.yaml
