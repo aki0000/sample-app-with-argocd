@@ -3,4 +3,4 @@ kind: Route
 metadata:
   name: sample-tomcat-preview
 spec:
-  host: sample-tomcat-preview.apps.rosa.akhino-modnize.6abk.p3.openshiftapps.com
+  host: sample-tomcat-rollout-preview.apps.rosa.akhino-modnize.6abk.p3.openshiftapps.com
